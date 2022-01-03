@@ -1,0 +1,44 @@
+.search-dropdown {
+  background: #fff;
+  border-radius: 0 0 30px 30px;
+  padding: 21px;
+  margin: 0 20px;
+  width: calc(100% - 40px);
+  transition: all 0.3s ease-in-out 0s, visibility 0s linear 0.3s, z-index 0s linear 0.01s;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      &:hover {
+        background-color: #e9ecef;
+      }
+
+      cursor: pointer;
+      padding: 5px;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid #dedede;
+      }
+    }
+  }
+}
+
+.show-more {
+
+}
+
+.card-profile {
+  margin-bottom: 20px;
+}
+
+.show-less {
+  height: 50px;
+  overflow: hidden;
+}
+
+.removeStock{
+  cursor: pointer;
+}
