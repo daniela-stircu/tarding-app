@@ -29,6 +29,7 @@ import Header from "components/Headers/Header.js";
 import WatchList from "components/StockPrediction/WatchList.js";
 import CompanyDetails from "components/StockPrediction/CompanyDetails";
 import CompanyChart from "components/StockPrediction/CompanyChart";
+import axios from "axios";
 
 class StockPrediction extends Component {
     constructor(props) {
@@ -40,9 +41,15 @@ class StockPrediction extends Component {
         }
     }
 
-    addToWatchList = (stock) => {
-        this.setState({watchList: [...this.state.watchList, stock]})
-        this.setState({activeCompany: stock})
+    addToWatchList = (companySymbol) => {
+        axios.get('https://radu-galan1-2un4mcz1nnmxv955.socketxp.com/add_stock/'+ companySymbol).then(response => {
+        })
+        axios.get('https://radu-galan1-2un4mcz1nnmxv955.socketxp.com/get_details/').then(response => {
+            console.log(response.data)
+            this.setState({watchList: response.data})
+        })
+        // this.setState({watchList: [...this.state.watchList, stock]})
+        // this.setState({activeCompany: stock})
     }
 
     removeFromWatchList = (index) => {

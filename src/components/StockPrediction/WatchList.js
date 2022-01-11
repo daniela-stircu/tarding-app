@@ -9,8 +9,10 @@ class WatchList extends Component {
 
     render() {
 
+        console.log(this.props.watchList)
         let entries = this.props.watchList.map(({currentPrice, prediction, recommendationKey, symbol}, index) => {
 
+            console.log(currentPrice)
             const predictionClass = classNames('fas mr-3',
                 {'fa-arrow-up text-success': recommendationKey === 'buy'},
                 {'fa-arrow-down text-danger': recommendationKey === 'sell'},
@@ -23,21 +25,21 @@ class WatchList extends Component {
                 {'text-info': recommendationKey === 'hold'},
             );
 
-            return (
-                <tr>
-                    <th scope="row">{symbol}</th>
-                    <td>{currentPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
-                    <td>
-                        <i className={predictionClass}/>{prediction}%
-                    </td>
-                    <td><span className={actionClass}>{recommendationKey}
-                    </span>
-                    </td>
-                    <td><UncontrolledTooltip   delay={0}
-                                               trigger="hover focus"
-                                               target="tooltip982655500">Remove from watchlist</UncontrolledTooltip><span id="tooltip982655500" className="fas fa-times removeStock text-danger" onClick={() => this.props.removeFromWatchList(index)}> </span></td>
-                </tr>
-            )
+            // return (
+            //     <tr>
+            //         <th scope="row">{symbol}</th>
+            //         <td>{currentPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
+            //         <td>
+            //             <i className={predictionClass}/>{prediction}%
+            //         </td>
+            //         <td><span className={actionClass}>{recommendationKey}
+            //         </span>
+            //         </td>
+            //         <td><UncontrolledTooltip   delay={0}
+            //                                    trigger="hover focus"
+            //                                    target="tooltip982655500">Remove from watchlist</UncontrolledTooltip><span id="tooltip982655500" className="fas fa-times removeStock text-danger" onClick={() => this.props.removeFromWatchList(index)}> </span></td>
+            //     </tr>
+            // )
         })
 
         return (

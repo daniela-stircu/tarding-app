@@ -34,7 +34,7 @@ class SearchStock extends Component {
 
     searchStocks(e) {
         if (this.state.searchQuery.length) {
-            axios.get('../sample-json/companies.json').then(response => {
+            axios.get('https://radu-galan1-2un4mcz1nnmxv955.socketxp.com/search/'+ this.state.searchQuery).then(response => {
                 this.setState({searchResults: response.data})
             })
         } else {
