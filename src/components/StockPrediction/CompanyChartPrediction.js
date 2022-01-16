@@ -6,7 +6,7 @@ class CompanyChartPrediction extends Component {
 
     render() {
 
-        if (this.props.company.predictions == undefined) {
+        if (this.props.company.predictions === undefined) {
             return (null);
         }
 
