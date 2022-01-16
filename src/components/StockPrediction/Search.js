@@ -3,13 +3,10 @@ import axios from 'axios'
 import SearchDropDown from "./SearchDropDown";
 // reactstrap components
 import {
-    Form,
-    FormGroup,
     InputGroupAddon,
     InputGroupText,
     Input,
     InputGroup,
-    Dropdown, DropdownMenu, DropdownItem,
 } from "reactstrap";
 
 class SearchStock extends Component {
@@ -18,13 +15,13 @@ class SearchStock extends Component {
         super(props);
         this.state = {
             searchQuery: "",
-            searchResults: [],
+            searchResults: null,
         }
     }
 
     clearSearchQuery = () => {
         this.setState({searchQuery: ""})
-        this.setState({searchResults: []});
+        this.setState({searchResults: null});
 
     }
 
@@ -33,12 +30,14 @@ class SearchStock extends Component {
     }
 
     searchStocks(e) {
-        if (this.state.searchQuery.length) {
-            axios.get('https://radu-galan1-2un4mcz1nnmxv955.socketxp.com/search/'+ this.state.searchQuery).then(response => {
-                this.setState({searchResults: response.data})
-            })
-        } else {
-            this.setState({searchResults: []})
+        if(e.key === 'Enter') {
+            if (this.state.searchQuery.length) {
+                axios.get('https://radu-galan1-2un4mcz1nnmxv955.socketxp.com/search/' + this.state.searchQuery).then(response => {
+                    this.setState({searchResults: response.data.length ? response.data : []})
+                })
+            } else {
+                this.setState({searchResults: []})
+            }
         }
     }
 
@@ -71,7 +70,7 @@ class SearchStock extends Component {
                                onKeyUp={this.searchStocks.bind(this)}
                         />
                     </InputGroup>
-                    {this.state.searchResults.length > 0 ?
+                    {this.state.searchResults !== null ?
                         <SearchDropDown searchResults={this.state.searchResults} watchList={this.props.watchList}
                                         addToWatchList={this.props.addToWatchList} clearSearchQuery={this.clearSearchQuery}/> : null}
                 </div>

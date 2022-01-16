@@ -20,7 +20,7 @@ import Index from "views/Index.js";
 var routes = [
   {
     path: "/index",
-    name: "Dashboard",
+    name: "Stock Predictor",
     icon: "ni ni-tv-2 text-primary",
     component: Index,
     layout: "/admin",

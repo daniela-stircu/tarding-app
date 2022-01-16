@@ -4,6 +4,7 @@
   padding: 21px;
   margin: 0 20px;
   width: calc(100% - 40px);
+  max-width: 560px !important;
   transition: all 0.3s ease-in-out 0s, visibility 0s linear 0.3s, z-index 0s linear 0.01s;
 
   ul {
@@ -26,8 +27,37 @@
   }
 }
 
-.show-more {
+.show-details {
+  cursor: pointer;
+  color: #5e72e4;
 
+  &:hover {
+    color: orange;
+  }
+}
+
+.watchlist {
+  tbody{
+    max-height: 240px !important;
+    overflow-x: auto;
+    display: inline-block;
+  }
+  th, td {
+    padding: 10px 7px !important;
+    //display: table;
+    //width: 100%;
+    //table-layout: fixed;
+  }
+  td:last-child, th:last-child{
+    width: 25px;
+  }
+
+  tr {
+    cursor: pointer;
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
 }
 
 .card-profile {
@@ -39,6 +69,6 @@
   overflow: hidden;
 }
 
-.removeStock{
+.removeStock {
   cursor: pointer;
 }

@@ -28,7 +28,8 @@ import {
 import Header from "components/Headers/Header.js";
 import WatchList from "components/StockPrediction/WatchList.js";
 import CompanyDetails from "components/StockPrediction/CompanyDetails";
-import CompanyChart from "components/StockPrediction/CompanyChart";
+import CompanyChartPrice from "components/StockPrediction/CompanyChartPrice";
+import CompanyChartPrediction from "components/StockPrediction/CompanyChartPrediction";
 import axios from "axios";
 
 class StockPrediction extends Component {
@@ -39,52 +40,102 @@ class StockPrediction extends Component {
             watchList: [],
             activeCompany: null,
         }
+        this.populateWatchList()
     }
 
     addToWatchList = (companySymbol) => {
-        axios.get('https://radu-galan1-2un4mcz1nnmxv955.socketxp.com/add_stock/'+ companySymbol).then(response => {
+        axios.get('https://radu-galan1-2un4mcz1nnmxv955.socketxp.com/add_stock/' + companySymbol).then(response => {
+            this.populateWatchList()
         })
-        axios.get('https://radu-galan1-2un4mcz1nnmxv955.socketxp.com/get_details/').then(response => {
-            console.log(response.data)
-            this.setState({watchList: response.data})
-        })
-        // this.setState({watchList: [...this.state.watchList, stock]})
-        // this.setState({activeCompany: stock})
+
     }
 
-    removeFromWatchList = (index) => {
+    populateWatchList = () => {
+        axios.get('https://radu-galan1-2un4mcz1nnmxv955.socketxp.com/get_details/').then(response => {
+
+            const StockList = []
+            response.data.forEach((item) => {
+                StockList.push({
+                    symbol: item[0],
+                    name: item[1],
+                    country: item[2],
+                    sector: item[3],
+                    industry: item[4],
+                    currency: item[5],
+                    cashflow: item[6],
+                    debt: item[7],
+                    earnings_growth: item[8],
+                    ipo_year: item[9],
+                    exchange: item[10],
+                    exchange_name: item[11],
+                    logo_url: item[12],
+                    no_employees: item[13],
+                    otherData: item[14],
+                    prediction_1: item[15],
+                    prediction_2: item[16],
+                })
+            })
+            this.setState({watchList: StockList})
+        })
+    }
+
+    showStockDetails = (e, index) => {
+        if (e.target.classList.contains("removeStock")) {
+            return;
+        }
+        const currentStock = this.state.watchList[index]
+        this.setState(state => (state.activeCompany = currentStock))
+        axios.get('https://radu-galan1-2un4mcz1nnmxv955.socketxp.com/get_price/' + currentStock.symbol).then(response => {
+            this.setState(state => (state.activeCompany.prices = response.data))
+
+        })
+        axios.get('https://radu-galan1-2un4mcz1nnmxv955.socketxp.com/get_prediction/' + currentStock.symbol).then(response => {
+            this.setState(state => (state.activeCompany.predictions = response.data))
+        })
+    }
+
+    removeFromWatchList = (e, index) => {
+        e.preventDefault()
         if (this.state.activeCompany !== null && (this.state.watchList[index].symbol === this.state.activeCompany.symbol)) {
             this.setState({activeCompany: null})
         }
-        this.setState({
-            watchList: this.state.watchList.filter(function (company, companyIndex) {
-                return companyIndex !== index
-            })
-        });
+        axios.get('https://radu-galan1-2un4mcz1nnmxv955.socketxp.com/remove_stock/' + this.state.watchList[index].symbol).then(response => {
+            this.setState({
+                watchList: this.state.watchList.filter(function (company, companyIndex) {
+                    return companyIndex !== index
+                })
+            });
+        })
     }
 
     emptyWatchList = () => {
-        this.setState({activeCompany: null})
-        this.setState({watchList: []})
+        axios.get('https://radu-galan1-2un4mcz1nnmxv955.socketxp.com/remove_stock/').then(response => {
+            this.setState({activeCompany: null})
+            this.setState({watchList: []})
+        })
     }
 
     render() {
         let pageContent;
         if (this.state.watchList.length > 0) {
-            let watchList = <Col className="order-xl-1" xl="5">
+            let watchList = <Col className="order-xl-1" xl="4">
                 <WatchList watchList={this.state.watchList} removeFromWatchList={this.removeFromWatchList}
+                           showStockDetails={this.showStockDetails}
                            emptyWatchList={this.emptyWatchList}/>
             </Col>
 
-            let companyDetails;
+            let companyDetails, graphs
             if (this.state.activeCompany !== null) {
-                companyDetails = <Col className="order-xl-1" xl="7">
-                    <CompanyDetails company={this.state.activeCompany}/>
-                    <CompanyChart company={this.state.activeCompany}/>
-                </Col>
+                companyDetails = <Col className="order-xl-1" xl="8">
+                    <CompanyDetails company={this.state.activeCompany}/></Col>
+                graphs         = <Row className="mt-3">
+                    <Col className="order-xl-1" xl="6"><CompanyChartPrice company={this.state.activeCompany}/></Col>
+                    <Col className="order-xl-1" xl="6"><CompanyChartPrediction
+                        company={this.state.activeCompany}/></Col>
+                </Row>
             }
 
-            pageContent = <Row>{watchList} {companyDetails}</Row>
+            pageContent = <div><Row>{watchList} {companyDetails}</Row> {graphs}</div>
         } else {
             pageContent = <Col className="order-xl-1" xl="12">
                 <Card className="bg-secondary shadow">

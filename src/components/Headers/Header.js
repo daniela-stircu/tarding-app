@@ -4,10 +4,6 @@ import Search from "../StockPrediction/Search";
 
 class Header extends Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <>

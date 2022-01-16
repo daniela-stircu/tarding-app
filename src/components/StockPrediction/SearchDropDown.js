@@ -1,9 +1,6 @@
 import React, {Component} from "react";
 
 class SearchDropDown extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     addToWatchlist(company) {
         this.props.clearSearchQuery()
@@ -14,7 +11,7 @@ class SearchDropDown extends Component {
         let entries;
         if (this.props.searchResults.length > 0) {
             entries = this.props.searchResults.map((company, index) => (
-                <li onClick={(e) => this.addToWatchlist(company[0])}>{company[1]} <span
+                <li key={company[0]} onClick={(e) => this.addToWatchlist(company[0])}>{company[1]} <span
                     className="font-weight-bold">({company[0]})</span></li>
             ))
         } else {
